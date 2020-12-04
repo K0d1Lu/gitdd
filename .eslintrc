@@ -1,0 +1,18 @@
+{
+	"env": {
+		"node": true,
+		"es6": true,
+		"jest": true
+	},
+	"parserOptions": {
+		"ecmaVersion": 2019,
+		"sourceType": "module"
+	},
+	"extends": ["eslint:recommended", "prettier", "plugin:jest/recommended"],
+
+	"plugins": ["standard", "prettier", "jest"],
+
+	"rules": {
+		"jest/no-test-callback": "off"
+	}
+}

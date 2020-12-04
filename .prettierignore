@@ -1,0 +1,7 @@
+.prettierignore
+.gitignore
+.editorconfig
+package*
+coverage/
+node_modules/
+doc/

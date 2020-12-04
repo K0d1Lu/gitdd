@@ -1,0 +1,4 @@
+{
+	"collectCoverage": true,
+	"coverageReporters": ["html", "text-summary"]
+}
