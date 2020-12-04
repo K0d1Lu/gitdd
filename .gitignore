@@ -1,0 +1,12 @@
+# Personnal configuration file
+.npmrc
+.gitconfig
+
+# Dependency directories
+node_modules/
+
+# Documentation
+doc/
+
+# Tests
+coverage/
