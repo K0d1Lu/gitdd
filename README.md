@@ -13,8 +13,12 @@ Options :
 
 -u given url of the git repository (mandatory)
 -d folder to download (optional - default to repository name)
--o output folder (optional - default to folder to download name or repository name)
+-o output folder (optional - default to repository name)
 ```
+
+
+
+Type `$ gitd --help`to get more insight
 
 
 

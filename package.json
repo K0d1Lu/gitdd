@@ -2,7 +2,9 @@
 	"name": "gitd",
 	"version": "0.0.1",
 	"description": "The easiest way to download particular directory of any git repository.",
-	"main": "index.js",
+	"bin": {
+		"gitd": "src/cli.mjs"
+	},
 	"scripts": {
 		"test": "jest --config=./jest.config.json",
 		"test:m": "majestic",
@@ -17,7 +19,8 @@
 	"author": "K0d1Lu",
 	"license": "ISC",
 	"dependencies": {
-		"shelljs": "^0.8.4"
+		"shelljs": "^0.8.4",
+		"yargs": "^16.1.1"
 	},
 	"devDependencies": {
 		"eslint": "^7.14.0",
