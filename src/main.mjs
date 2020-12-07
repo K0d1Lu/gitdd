@@ -40,7 +40,7 @@ export default async function gitd(
 
 	if (!code) {
 		return {
-			path: folder ? `${out}/${folder}` : out,
+			path: folder && flatten !== false ? `${out}/${folder}` : out,
 		}
 	}
 
