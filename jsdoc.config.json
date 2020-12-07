@@ -1,0 +1,20 @@
+{
+	"source": {
+		"include": ["./src"],
+		"includePattern": ".mjs$"
+	},
+	"sourceType": "module",
+	"opts": {
+		"encoding": "utf8",
+		"recurse": true,
+		"verbose": true,
+		"destination": "./jsdoc/"
+	},
+	"templates": {
+		"default": {
+			"staticFiles": {
+				"include": ["./gitd.png"]
+			}
+		}
+	}
+}

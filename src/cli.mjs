@@ -12,10 +12,7 @@ if (!shelljs.which('git')) {
 	shelljs.exit(42)
 }
 
-/**
- * Setup cli options
- * Set aliases and support --help
- */
+// Setup cli options and Set aliases and support --help
 const args = yargs(hideBin(process.argv))
 	.options({
 		url: {

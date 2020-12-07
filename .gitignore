@@ -6,7 +6,7 @@
 node_modules/
 
 # Documentation
-doc/
+jsdoc/
 
 # Tests
 coverage/

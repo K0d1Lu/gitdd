@@ -9,6 +9,22 @@ const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
 const cli = path.resolve(__dirname, 'cli.mjs')
 
+/**
+ * Download subfolder from any git repository
+ *
+ * @async
+ * @function gitd
+ *
+ * @param {String} url - git url to get the files from
+ * @param {Object} [options] - options to pass to cli script
+ * @param {String} [options.folder] - subfolder of the git repository to download (defaulted to the whole repository)
+ * @param {String} [options.output] - folder where to dowload the (defaulted to the repository name)
+ * @param {String} [options.branch] - branch to checkout (defaulted to master)
+ * @param {Boolean} [options.history] - manage if we keep history or not (if not .git folder is deleted, defaulted to false)
+ * @param {Boolean} [options.flatten] - manage if we put subdirectory files into the root of output folder or not (defaulted to true)
+ *
+ * @returns {Promise} Reject with error code and message if an error occured || resolve with an object containing the path to the files
+ */
 export default async function gitd(
 	url,
 	{ folder, output, branch, history, flatten }
