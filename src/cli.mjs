@@ -50,6 +50,13 @@ const args = yargs(hideBin(process.argv))
 			type: 'boolean',
 			default: false,
 		},
+		flatten: {
+			alias: 'f',
+			demandOption: false,
+			describe: 'move subdirectory files and folder to output folder root',
+			type: 'boolean',
+			default: true,
+		},
 	})
 	.example(
 		'$0 -u https://git.com/owner/repo.git -d docs -o repo-docs -b dev',
@@ -68,7 +75,7 @@ const args = yargs(hideBin(process.argv))
 const { url } = args
 
 const repo = getRepoFromUrl(url)
-const { dir, branch, history } = args
+const { dir, branch, history, flatten } = args
 const { out = repo } = args
 
 // create directory and make it current directory
@@ -103,4 +110,9 @@ if (
 
 if (!history) {
 	shelljs.exec('rm -rf .git')
+}
+
+if (flatten) {
+	shelljs.exec(`cd ${dir} && mv * ../`)
+	shelljs.exec(`rm -rf ${dir}`)
 }

@@ -12,11 +12,12 @@ gitd -u https://link-to-any-git-repository/project.git -d docs -o mydocs
 Options :
 
 -u given url of the git repository (mandatory)
--d folder to download (optional - default to repository name)
--o output folder (optional - default to repository name)
+-d folder to download (optional - default: repository name)
+-o output folder (optional - default: repository name)
+-b branch to checkout (optional - default: "master")
+-h keep git history (optional - default: false)
+-f move subdir content to output root (optional - default: true)
 ```
-
-
 
 Type `$ gitd --help`to get more insight
 
@@ -27,14 +28,16 @@ Type `$ gitd --help`to get more insight
 ```javascript
 import gitd from 'gitd'
 
-gitd.download(url, [folder], [output])
+gitd.download(url, [{folder, output, branch, history, flatten}])
     .then(() => {
         // use your files
     })
     .catch(err => {
-        // error handling
+        // error handling (see error.code and error.message for)
     })
 ```
+
+`folder`, `output` and `branch`, `history`, `flatten` parameters are passed in an object and each of them is optional. They are defaulted the same way as they are in the CLI usage version.
 
 
 
