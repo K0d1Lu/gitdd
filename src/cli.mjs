@@ -4,6 +4,14 @@ import shelljs from 'shelljs'
 import yargs from 'yargs'
 import { hideBin } from 'yargs/helpers'
 
+import { getRepoFromUrl } from './modules/strings.mjs'
+
+// git is mandatory to run gitd
+if (!shelljs.which('git')) {
+	shelljs.echo('Sorry, this script requires git')
+	shelljs.exit(42)
+}
+
 /**
  * Setup cli options
  * Set aliases and support --help
@@ -28,14 +36,29 @@ const args = yargs(hideBin(process.argv))
 			describe: 'local directory where to download files',
 			type: 'string',
 		},
+		branch: {
+			alias: 'b',
+			demandOption: false,
+			describe: 'branch to get the files from',
+			type: 'string',
+			default: 'master',
+		},
+		history: {
+			alias: 'h',
+			demandOption: false,
+			describe: 'keep git history of the downloaded folder',
+			type: 'boolean',
+			default: false,
+		},
 	})
 	.example(
-		'$0 -u https://git.com/owner/repo.git -d docs -o repo-docs',
+		'$0 -u https://git.com/owner/repo.git -d docs -o repo-docs -b dev',
 		'will create a "repo-docs" directory and clone the subdirectory docs of the "repo" repository into it.'
 	)
 	.check(argv => {
 		if (argv.url.slice(argv.url.length - 4) !== '.git') {
-			throw new Error('Url must be a git repository (i.e : ending with.git)')
+			shelljs.echo('url must be a git repository (i.e : ending with.git)')
+			shelljs.exit(43)
 		} else {
 			return true
 		}
@@ -45,7 +68,7 @@ const args = yargs(hideBin(process.argv))
 const { url } = args
 
 const repo = getRepoFromUrl(url)
-const { dir } = args
+const { dir, branch, history } = args
 const { out = repo } = args
 
 // create directory and make it current directory
@@ -65,19 +88,19 @@ shelljs.exec(`git remote add origin ${url}`)
 
 if (dir) {
 	shelljs.exec('git config core.sparseCheckout true')
-	shelljs.exec(`echo ${dir} > .git/info/sparse-checkout`)
+	shelljs.exec(`echo "${dir}" > .git/info/sparse-checkout`)
 }
 
-shelljs.exec('git pull origin master')
+if (
+	shelljs.exec(`git pull origin ${branch} ${history ? '' : '--depth 1'}`)
+		.code !== 0
+) {
+	shelljs.echo(
+		'git pull failed, please check repository, folder and branch names'
+	)
+	shelljs.exit(44)
+}
 
-/**
- * Extract git repository name from a given git url
- *
- * @param {String} url url to parse
- * @returns {String} name of the git repository
- */
-function getRepoFromUrl(url) {
-	const parts = url.split('/')
-	const gitPart = parts[parts.length - 1]
-	return gitPart.split('.')[0]
+if (!history) {
+	shelljs.exec('rm -rf .git')
 }
