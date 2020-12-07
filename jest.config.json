@@ -1,4 +1,7 @@
 {
 	"collectCoverage": true,
-	"coverageReporters": ["html", "text-summary"]
+	"coverageReporters": ["html", "text-summary"],
+	"moduleNameMapper": {
+		"~(.*)$": "<rootDir>/src/$1"
+	}
 }
