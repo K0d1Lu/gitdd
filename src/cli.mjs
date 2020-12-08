@@ -38,7 +38,7 @@ const args = yargs(hideBin(process.argv))
 			demandOption: false,
 			describe: 'branch to get the files from',
 			type: 'string',
-			default: 'master',
+			default: 'main',
 		},
 		history: {
 			alias: 'h',
@@ -100,7 +100,7 @@ if (
 		.code !== 0
 ) {
 	shelljs.echo(
-		'git pull failed, please check repository, folder and branch names'
+		'git pull failed, please check repository, directory and branch names'
 	)
 	shelljs.exit(44)
 }
@@ -109,7 +109,7 @@ if (!history) {
 	shelljs.exec('rm -rf .git')
 }
 
-if (flatten) {
+if (dir && flatten) {
 	shelljs.exec(`cd ${dir} && mv * ../`)
 	shelljs.exec(`rm -rf ${dir}`)
 }

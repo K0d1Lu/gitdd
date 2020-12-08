@@ -17,8 +17,8 @@ const cli = path.resolve(__dirname, 'cli.mjs')
  *
  * @param {String} url - git url to get the files from
  * @param {Object} [options] - options to pass to cli script
- * @param {String} [options.folder] - subfolder of the git repository to download (defaulted to the whole repository)
- * @param {String} [options.output] - folder where to dowload the (defaulted to the repository name)
+ * @param {String} [options.dir] - subfolder of the git repository to download (defaulted to the whole repository)
+ * @param {String} [options.out] - folder where to dowload the (defaulted to the repository name)
  * @param {String} [options.branch] - branch to checkout (defaulted to master)
  * @param {Boolean} [options.history] - manage if we keep history or not (if not .git folder is deleted, defaulted to false)
  * @param {Boolean} [options.flatten] - manage if we put subdirectory files into the root of output folder or not (defaulted to true)
@@ -27,20 +27,20 @@ const cli = path.resolve(__dirname, 'cli.mjs')
  */
 export default async function gitd(
 	url,
-	{ folder, output, branch, history, flatten }
+	{ dir, out, branch, history, flatten } = {}
 ) {
-	const cmd = `node ${cli} -u ${url} ${folder ? '-d ' + folder : ''} ${
-		output ? '-o ' + output : ''
-	} ${branch ? '-b ' + branch : ''} ${history ? '-h' + history : ''} ${
-		flatten ? '-f' + flatten : ''
-	}}`
+	const cmd = `node ${cli} -u ${url} ${dir ? '-d ' + dir : ''} ${
+		out ? '-o ' + out : ''
+	} ${branch ? '-b ' + branch : ''} ${
+		typeof history !== 'undefined' ? '-h ' + history : ''
+	} ${typeof flatten !== 'undefined' ? '-f ' + flatten : ''}`
 
 	const { code } = await shelljs.exec(cmd)
-	const out = output ? output : `${process.cwd()}/${getRepoFromUrl(url)}`
+	const output = out ? out : `${process.cwd()}/${getRepoFromUrl(url)}`
 
 	if (!code) {
 		return {
-			path: folder && flatten !== false ? `${out}/${folder}` : out,
+			path: dir && flatten === false ? `${output}/${dir}` : output,
 		}
 	}
 
@@ -54,13 +54,14 @@ export default async function gitd(
 			message = 'url must be a git repository (i.e : ending with.git)'
 			break
 		case 44:
-			message = 'git pull failed, please check folder or branch name'
+			message =
+				'git pull failed, please check repository, directory and branch names'
 			break
 		default:
 			message = 'unknown error occured during gitd execution'
 	}
 
-	shelljs.exec(`rm -rf ${out}`)
+	shelljs.exec(`rm -rf ${output}`)
 
 	throw { code, message }
 }
