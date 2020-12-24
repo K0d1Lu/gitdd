@@ -1,6 +1,7 @@
 import fs from 'fs'
 import shelljs from 'shelljs'
-import gitd from '~main.mjs'
+import gitd from '~main.js'
+import { handleGitdError } from '~main.js'
 
 describe('Main module', function () {
 	it('Should export a gitd method', function () {
@@ -81,10 +82,11 @@ describe('Main module', function () {
 	describe('Gitd method error handling', function () {
 		it('Should reject if url does not end wit .git', () => {
 			return gitd('https://github.com/K0d1Lu/gitd').catch(err => {
-				expect(err.message).toEqual(
+				const { code, message } = handleGitdError(err)
+				expect(message).toEqual(
 					'url must be a git repository (i.e : ending with.git)'
 				)
-				expect(err.code).toEqual(43)
+				expect(code).toEqual(43)
 			})
 		})
 
@@ -92,19 +94,23 @@ describe('Main module', function () {
 			return gitd('https://github.com/K0d1Lu/gitd.git', {
 				branch: 'no-existing-branch',
 			}).catch(err => {
-				expect(err.message).toEqual(
+				const { code, message } = handleGitdError(err)
+
+				expect(message).toEqual(
 					'git pull failed, please check repository, directory and branch names'
 				)
-				expect(err.code).toEqual(44)
+				expect(code).toEqual(44)
 			})
 		})
 
 		it('Should reject if git pulled failed because of wrong repository name', () => {
 			return gitd('https://github.com/K0d1Lu/gitddd.git').catch(err => {
-				expect(err.message).toEqual(
+				const { code, message } = handleGitdError(err)
+
+				expect(message).toEqual(
 					'git pull failed, please check repository, directory and branch names'
 				)
-				expect(err.code).toEqual(44)
+				expect(code).toEqual(44)
 			})
 		})
 
@@ -112,10 +118,12 @@ describe('Main module', function () {
 			return gitd('https://github.com/K0d1Lu/gitd.git', {
 				dir: 'non-existing-directory',
 			}).catch(err => {
-				expect(err.message).toEqual(
+				const { code, message } = handleGitdError(err)
+
+				expect(message).toEqual(
 					'git pull failed, please check repository, directory and branch names'
 				)
-				expect(err.code).toEqual(44)
+				expect(code).toEqual(44)
 			})
 		})
 

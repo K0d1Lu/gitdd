@@ -1,13 +1,9 @@
+import * as child from 'child_process'
+import util from 'util'
 import path from 'path'
-import { fileURLToPath } from 'url'
-import { dirname } from 'path'
 
-import shelljs from 'shelljs'
 import { getRepoFromUrl } from './modules/strings.mjs'
-
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = dirname(__filename)
-const cli = path.resolve(__dirname, 'cli.mjs')
+import { datas } from './modules/datas.mjs'
 
 /**
  * Download subfolder from any git repository
@@ -29,23 +25,36 @@ export default async function gitd(
 	url,
 	{ dir, out, branch, history, flatten } = {}
 ) {
-	const cmd = `node ${cli} -u ${url} ${dir ? '-d ' + dir : ''} ${
-		out ? '-o ' + out : ''
-	} ${branch ? '-b ' + branch : ''} ${
-		typeof history !== 'undefined' ? '-h ' + history : ''
-	} ${typeof flatten !== 'undefined' ? '-f ' + flatten : ''}`
+	const exec = util.promisify(child.exec)
+	const n = 'node'
+	const p = path.join(path.resolve(), 'node_modules/gitd/src/cli.mjs')
+	const u = `-u ${url}`
+	const d = dir ? `-d ${dir}` : ''
+	const o = out ? `-o ${out}` : ''
+	const b = branch ? `-b ${branch}` : ''
+	const h = typeof history !== 'undefined' ? `-h ${history}` : ''
+	const f = typeof flatten !== 'undefined' ? `-f ${flatten}` : ''
 
-	const { code } = await shelljs.exec(cmd)
-	const output = out ? out : `${process.cwd()}/${getRepoFromUrl(url)}`
+	const cmd = `${n} ${p} ${u} ${d} ${o} ${b} ${h} ${f}`
+	datas.output = out ? out : `${process.cwd()}/${getRepoFromUrl(url)}`
 
-	if (!code) {
-		return {
-			path: dir && flatten === false ? `${output}/${dir}` : output,
-		}
+	await exec(cmd)
+
+	return {
+		path: dir && flatten === false ? `${datas.output}/${dir}` : datas.output,
 	}
+}
 
+/**
+ * Called when main script is on error
+ * It gives insight aboout the internal error and remove created folder
+ *
+ * @param {Object} error - Error object
+ * @param {Boolean} [delete] - Flag to delete or not the output folder
+ */
+export function handleGitdError(error, del = true) {
 	let message
-
+	const { code = 0 } = error
 	switch (code) {
 		case 42:
 			message = 'git must be installed to run gitd'
@@ -61,7 +70,9 @@ export default async function gitd(
 			message = 'unknown error occured during gitd execution'
 	}
 
-	shelljs.exec(`rm -rf ${output}`)
+	if (del) {
+		child.exec(`rm -rf ${datas.output}`)
+	}
 
-	throw { code, message }
+	return { code, message }
 }
