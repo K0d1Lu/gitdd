@@ -12,7 +12,7 @@ import { datas } from './modules/datas.mjs'
  * Download subfolder from any git repository
  *
  * @async
- * @function gitd
+ * @function gitdd
  *
  * @param {String} url - git url to get the files from
  * @param {Object} [options] - options to pass to cli script
@@ -24,7 +24,7 @@ import { datas } from './modules/datas.mjs'
  *
  * @returns {Promise} Reject with error code and message if an error occured || resolve with an object containing the path to the files
  */
-export default async function gitd(
+export default async function gitdd(
 	url,
 	{ dir, out, branch, history, flatten } = {}
 ) {
@@ -59,7 +59,7 @@ export function handleGitdError(error, del = true) {
 	const { code = 0 } = error
 	switch (code) {
 		case 42:
-			message = 'git must be installed to run gitd'
+			message = 'git must be installed to run gitdd'
 			break
 		case 43:
 			message = 'url must be a git repository (i.e : ending with.git)'
@@ -71,7 +71,7 @@ export function handleGitdError(error, del = true) {
 			message = 'git pull failed, please check directory and branch names'
 			break
 		default:
-			message = 'unknown error occured during gitd execution'
+			message = 'unknown error occured during gitdd execution'
 	}
 
 	if (del) {

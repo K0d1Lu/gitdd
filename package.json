@@ -1,10 +1,10 @@
 {
-	"name": "gitd",
-	"version": "0.0.2",
+	"name": "gitdd",
+	"version": "0.0.1",
 	"description": "The easiest way to download particular directory of any git repository.",
 	"main": "src/main.mjs",
 	"bin": {
-		"gitd": "src/cli.mjs"
+		"gitdd": "src/cli.mjs"
 	},
 	"scripts": {
 		"test": "node --experimental-vm-modules node_modules/jest/bin/jest.js --config=./jest.config.json",

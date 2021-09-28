@@ -6,7 +6,7 @@ import { hideBin } from 'yargs/helpers'
 
 import { getRepoFromUrl } from './modules/strings.mjs'
 
-// git is mandatory to run gitd
+// git is mandatory to run gitdd
 if (!shelljs.which('git')) {
 	shelljs.echo('Sorry, this script requires git')
 	shelljs.exit(42)

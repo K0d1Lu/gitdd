@@ -13,7 +13,7 @@
 	"templates": {
 		"default": {
 			"staticFiles": {
-				"include": ["./gitd.png"]
+				"include": ["./gitdd.png"]
 			}
 		}
 	}
