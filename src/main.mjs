@@ -1,6 +1,9 @@
 import * as child from 'child_process'
 import util from 'util'
-import path from 'path'
+import path, { dirname } from 'path'
+import { fileURLToPath } from 'url'
+
+const __dirname = dirname(fileURLToPath(import.meta.url))
 
 import { getRepoFromUrl } from './modules/strings.mjs'
 import { datas } from './modules/datas.mjs'
@@ -27,7 +30,7 @@ export default async function gitd(
 ) {
 	const exec = util.promisify(child.exec)
 	const n = 'node'
-	const p = path.join(path.resolve(), 'node_modules/gitd/src/cli.mjs')
+	const p = path.resolve(__dirname, './cli.mjs')
 	const u = `-u ${url}`
 	const d = dir ? `-d ${dir}` : ''
 	const o = out ? `-o ${out}` : ''
@@ -37,7 +40,6 @@ export default async function gitd(
 
 	const cmd = `${n} ${p} ${u} ${d} ${o} ${b} ${h} ${f}`
 	datas.output = out ? out : `${process.cwd()}/${getRepoFromUrl(url)}`
-
 	await exec(cmd)
 
 	return {
