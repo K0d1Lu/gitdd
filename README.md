@@ -23,22 +23,25 @@ Type `$ gitd --help`to get more insight
 
 Be careful that default branch name is "main" and not "master", according to new git policy. Check this first if the script failed.
 
+We support ssh connection to retrieve git files, just pass the git address in its ssh format (i.e *git@endpoint:project/repository.git*).
+
 ### Javascript module
 
 ```javascript
 import gitd from 'gitd'
 
 gitd
-	.download(url, [{ folder, output, branch, history, flatten }])
+	.(url, [{ dir, out, branch, history, flatten }])
 	.then(() => {
 		// use your files
 	})
 	.catch(err => {
-		// error handling (see error.code and error.message for)
+		// error handling
+  	const { code, message } = handleGitdError(err) // get internal error descriptor
 	})
 ```
 
-`folder`, `output` and `branch`, `history`, `flatten` parameters are passed in an object and each of them is optional. They are defaulted the same way as they are in the CLI usage version.
+`dir`, `out` and `branch`, `history`, `flatten` parameters are passed in an object and each of them is optional. They are defaulted the same way as they are in the CLI usage version.
 
 ## Installation
 
