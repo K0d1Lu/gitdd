@@ -95,7 +95,11 @@ if (dir) {
 	shelljs.exec(`echo "${dir}" > .git/info/sparse-checkout`)
 }
 
+const overHttp = url.slice(0, 4).toLowerCase() === 'http'
+// const overSsh = url.slice(0, 4).toLowerCase() === 'git@' // @todo: how to check repo ver ssh ?
+
 if (
+	overHttp &&
 	shelljs.exec(
 		`curl -s -o /dev/null -I -w "%{http_code}" ${url.split('.git')[0]}`,
 		{ silent: true }
