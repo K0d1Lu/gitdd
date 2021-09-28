@@ -97,9 +97,9 @@ describe('Main module', function () {
 				const { code, message } = handleGitdError(err)
 
 				expect(message).toEqual(
-					'git pull failed, please check repository, directory and branch names'
+					'git pull failed, please check directory and branch names'
 				)
-				expect(code).toEqual(44)
+				expect(code).toEqual(45)
 			})
 		})
 
@@ -107,9 +107,7 @@ describe('Main module', function () {
 			return gitd('https://github.com/K0d1Lu/gitddd.git').catch(err => {
 				const { code, message } = handleGitdError(err)
 
-				expect(message).toEqual(
-					'git pull failed, please check repository, directory and branch names'
-				)
+				expect(message).toEqual('git pull failed, please check repository name')
 				expect(code).toEqual(44)
 			})
 		})
@@ -121,9 +119,9 @@ describe('Main module', function () {
 				const { code, message } = handleGitdError(err)
 
 				expect(message).toEqual(
-					'git pull failed, please check repository, directory and branch names'
+					'git pull failed, please check directory and branch names'
 				)
-				expect(code).toEqual(44)
+				expect(code).toEqual(45)
 			})
 		})
 

@@ -65,8 +65,10 @@ export function handleGitdError(error, del = true) {
 			message = 'url must be a git repository (i.e : ending with.git)'
 			break
 		case 44:
-			message =
-				'git pull failed, please check repository, directory and branch names'
+			message = 'git pull failed, please check repository name'
+			break
+		case 45:
+			message = 'git pull failed, please check directory and branch names'
 			break
 		default:
 			message = 'unknown error occured during gitd execution'

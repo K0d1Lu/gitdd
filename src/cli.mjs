@@ -96,13 +96,21 @@ if (dir) {
 }
 
 if (
+	shelljs.exec(
+		`curl -s -o /dev/null -I -w "%{http_code}" ${url.split('.git')[0]}`,
+		{ silent: true }
+	).stdout !== '200'
+) {
+	shelljs.echo('git pull failed, please check repository name')
+	shelljs.exit(44)
+}
+
+if (
 	shelljs.exec(`git pull origin ${branch} ${history ? '' : '--depth 1'}`)
 		.code !== 0
 ) {
-	shelljs.echo(
-		'git pull failed, please check repository, directory and branch names'
-	)
-	shelljs.exit(44)
+	shelljs.echo('git pull failed, please check directory and branch names')
+	shelljs.exit(45)
 }
 
 if (!history) {
