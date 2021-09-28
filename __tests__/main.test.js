@@ -1,7 +1,7 @@
 import fs from 'fs'
 import shelljs from 'shelljs'
-import gitd from '~main.js'
-import { handleGitdError } from '~main.js'
+import gitd from '~main.mjs'
+import { handleGitdError } from '~main.mjs'
 
 describe('Main module', function () {
 	it('Should export a gitd method', function () {
@@ -128,8 +128,11 @@ describe('Main module', function () {
 		})
 
 		it('Should delete the output directory in case of failure', () => {
-			return gitd('https://github.com/K0d1Lu/gitd').catch(() => {
-				expect(fs.existsSync(`${process.cwd()}/gitd`)).toBe(false)
+			return gitd('https://github.com/K0d1Lu/gitd').catch(err => {
+				handleGitdError(err)
+				setTimeout(() => {
+					expect(fs.existsSync(`${process.cwd()}/gitd`)).toBe(false)
+				}, 0)
 			})
 		})
 	})
